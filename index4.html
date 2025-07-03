@@ -25,7 +25,7 @@ startBtn.addEventListener("click", () => {
         console.log("You said: ", transcript);
         display.value = transcript;
 
-        // Process the spoken input to calculate
+     
         const result = processInput(transcript);
         display.value = result;
         startBtn.addEventListener("mousemove", event => {
@@ -42,7 +42,7 @@ startBtn.addEventListener("click", () => {
 });
 
 function processInput(input) {
-    // Use a simple regex to extract numbers and operator
+   
     const match = input.match(/(\d+)\s*([\+\-\*\/])\s*(\d+)/);
     
     if (match) {
