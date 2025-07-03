@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Calculator</title>
+</head>
+<body>
+    <h1>Voice Calculator</h1>
+    <button type="button" id="start-btn">Start Listening</button>
+    <input type="text" id="display" readonly />
+    <script>
+const startBtn = document.getElementById("start-btn");
+const display = document.getElementById("display");
+
+startBtn.addEventListener("click", () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    event.target.style.backgroundColor = "white";
+    event.target.textContent = "listening...";
+    recognition.onstart = () => {
+        console.log("Listening...");
+    };
+   
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("You said: ", transcript);
+        display.value = transcript;
+
+        // Process the spoken input to calculate
+        const result = processInput(transcript);
+        display.value = result;
+        startBtn.addEventListener("mousemove", event => {
+            event.target.style.backgroundColor = "white";
+            event.target.textContent = "Start Listening";
+        });
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Error occurred in recognition: ", event.error);
+    };
+
+    recognition.start();
+});
+
+function processInput(input) {
+    // Use a simple regex to extract numbers and operator
+    const match = input.match(/(\d+)\s*([\+\-\*\/])\s*(\d+)/);
+    
+    if (match) {
+        const num1 = parseFloat(match[1]);
+        const operator = match[2];
+        const num2 = parseFloat(match[3]);
+
+        switch (operator) {
+            case '+':
+                return num1 + num2;
+            case '-':
+                return num1 - num2;
+            case '*':
+                return num1 * num2;
+            case '/':
+                if (num2 !== 0) {
+                    return num1 / num2;
+                } else {
+                    return "Error: Division by zero";
+                }
+            default:
+                return "Error: Unsupported operation";
+        }
+    } else {
+        return "Error: Invalid input";
+    }
+}
+
+
+
+    </script>
+</body>
+</html>
